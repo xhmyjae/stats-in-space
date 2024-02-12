@@ -73,9 +73,11 @@ count_by_year = data.groupby([data['Created At'].dt.year]).size()
 updated_by_counts = data.groupby([data['Updated At'].dt.year]).size()
 st.line_chart(pd.concat([count_by_year, updated_by_counts], axis=1, keys=['Created At', 'Updated At']))
 
-st.write('Graphique de la croissance de la taille du code au fil du temps.')
+st.write('Graphique de la croissance de la taille du code en moyenne au fil du temps (Ko).')
 data['Created At Year'] = data['Created At'].dt.year
-created_by_year_size = data.groupby('Created At Year')['Size'].mean()
+created_by_year_size: pd.Series = data.groupby('Created At Year')['Size'].mean()
+created_by_year_size /= 1024  # Convert to Ko
+created_by_year_size.index = created_by_year_size.index.astype(str)
 st.line_chart(created_by_year_size)
 
 

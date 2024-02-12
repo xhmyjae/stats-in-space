@@ -117,14 +117,28 @@ chart = alt.Chart(data_languages).mark_bar().encode(
 	y=alt.Y('Nombre de dépôts:Q', title='Nombre de dépôts'),
 	color=alt.Color('color', scale=None),
 )
+st.altair_chart(chart, use_container_width=True)
 
+
+st.write("Graphique de l'évolution de l'utilisation des langages de programmation au fil du temps.")
+data_languages_per_year = data.groupby('Language').filter(lambda x: len(x) > 10_000).groupby(
+	['Created At Year', 'Language']
+).size().unstack()
+
+chart = alt.Chart(data_languages_per_year.reset_index().melt('Created At Year')).mark_line().encode(
+	x=alt.X('Created At Year:O', title='Année'),
+	y=alt.Y('value:Q', title='Nombre de dépôts'),
+	color=alt.Color(
+		'Language:N',
+		scale=alt.Scale(range=[colors[lang] for lang in data_languages_per_year.columns])),
+)
 st.altair_chart(chart, use_container_width=True)
 
 st.write('Graphique de la taille moyenne des fichiers par langage de programmation.')
 
 data['Language'] = data['Language'].fillna(none_value)
 data_languages = data.groupby('Language')['Size'].mean().reset_index().sort_values(ascending=True, by='Size').tail(25)
-data_languages['Size'] = data_languages['Size'] / 1024  # Convert to Ko
+data_languages['Size'] /= 1024  # Convert to Ko
 
 data_languages['color'] = data_languages['Language'].apply(lambda x: colors[x] if x in colors else colors[none_value])
 data_languages.columns = ['Language', 'Taille moyenne des fichiers (Ko)', 'color']

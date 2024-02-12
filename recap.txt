@@ -1,0 +1,66 @@
+on est dans une entreprise qui veut voir si optimiser son github peut permettre d'ameliorer ses statistiques.
+
+
+prez de kheir :
+- points sur la situation du foot/philosophies actuelle
+- comparaison des philosophies
+- prez de leur entreprise outsider box et ce qu'elle fait
+- cas d'usage -> travaille pour un seul groupe (fc braca)
+typologie de donnees utilisee
+strategie de collecte
+exploration / nettoyage
+analyse & prez
+
+! il faut parler des donnees et montrer ce qu'on peut en faire
+! comment ce qu'on dit se traduit en donnees, comment on caracterise ces championats, quelles variables on analyse
+! quels types de donnees
+! quels championats de quand a quand
+! quelles variables utilisees pour quoi faire
+! quels types de graphs on fait, ce qu'on obtient de ça, quelles donnees pour faire ces graphs
+
+
+prez de mateo et ben :
+- recup deux types de donnees : globales et individuelles
+- preparation des donnees : doivent mettre en commun le resultat de plusieurs api
+- prez de possibilites d'analyse : presenter des graphs (ex: possible de comparer les genres de jeux avec un graph en bar, matrice de correlation pour comprendre si les users sont influences par leurs amis, graph en ligne pour montrer le temps de jeu total par annee de sortie pour indiquer la tendance populaire, boxplot pour examiner la repartition du temps de jeu en fonction des categories de jeu car visualisation de la mediane, les quartiles, les valeurs aberrantes, diag camembert pour determiner si les jeux sortis lors de certaines periodes de l'annee accumulent plus de temps de jeu/joueurs)
+- comment implenter l'algorithme 
+
+! parler des limites des requetes, comment les faire, ce qu'elles vont permettre de faire, ...
+! a chaque fois que qqch est dit, on doit dire comment on compte le faire, tout valider par une stat/graph/...
+
+
+prez de valentin et quentin :
+- donnees de rapport publics
+
+! quels types d'analyse peuvent etre faites
+
+
+prez olivier et antoine :
+- stats pour les equipes
+- stats gameplay
+- expliquent chaque stats qu'ils ont (decrivent chaque row du dataset)
+- winrate en fonction du nb de matchs joues
+- comparaison de statistiques = un plot nous dit qqch mais on se rend compte sur un autre plot que c'est pas vraiment valable
+
+on detaille leur approche en global puis par joueur
+
+! n'ont montré que le all dmg
+! montrer des stats pour autre chose
+! regarder des stats sur le comportement des joueurs
+! faire des sous cas d'usage : evolution de la compo, combien de fois les persos ont été joués
+
+
+prez marlon et cristian :
+- donne la date des donnees
+- utilisation de svm
+
+! faire attention a voir si deux donnees peuvent etre correlee
+! qu'est ce qui fait varier les donnees
+! bien voir la conclusion donnée par chaque graphique pour vendredi
+! qui a mis les données en ligne, d'où elles viennent exactement
+
+
+
+! faire des correlations et expliquer ce que signifie un chiffre fort ou non
+! expliquer des medianes et ecart-types et ce que ca fait
+! pour code python = est-ce qu'il suit les pep etc niveau qualite de code

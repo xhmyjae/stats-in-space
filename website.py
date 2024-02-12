@@ -20,7 +20,7 @@ data_load_state = st.text('Chargement des données...')
 data = load_data()
 data_load_state.empty()
 
-if st.checkbox('Afficher les données brut'):
+with st.expander('Voir les données brutes'):
 	st.write("Voici un aperçu des données :")
 	st.dataframe(data, column_config={
 		'Created At': st.column_config.DatetimeColumn(
@@ -151,17 +151,6 @@ st.write('Comparaison des métriques entre différents dépôts pour identifier 
 
 metrics = ['Stars', 'Forks', 'Issues', 'Watchers', 'Size']
 selected_repos = data.sample(n=5, random_state=42)
-# # Création des graphiques comparatifs
-# plt.figure(figsize=(12, 8))
-# for i, metric in enumerate(metrics):
-#     plt.subplot(2, 3, i + 1)
-#     sns.barplot(x='Name', y=metric, data=selected_repos)
-#     plt.title(f'Comparaison de {metric}')
-#     plt.xlabel('Dépôt')
-#     plt.ylabel(metric)
-#     plt.xticks(rotation=45)
-# plt.tight_layout()
-# plt.show()
 
 column1, column2 = st.columns(2)
 columns = [column1, column2]

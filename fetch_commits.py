@@ -19,7 +19,11 @@ g = Github(auth=auth)
 
 def fetch_commits(repo_slug: str) -> list[StatsContributor]:
 	repo = g.get_repo(repo_slug, lazy=True)
-	contributors = repo.get_stats_contributors()
+	try:
+		contributors = repo.get_stats_contributors()
+	except GithubException as e:
+		print(f"Error fetching contributors for '{repo_slug}': {e}")
+		return []
 	return contributors or []
 
 
@@ -42,9 +46,23 @@ for i, repo_slug in enumerate(repos_to_fetch):
 
 	print(f"{i + 1}/{len(repos_to_fetch)} Fetched {len(contributors)} contributors for '{repo_slug}', total commits: {commits_count}, remaining rate limit: {g.rate_limiting[0]}")
 
-	oldest_date = min([c.weeks[0].w for c in contributors])
-	latest_date = max([c.weeks[-1].w for c in contributors])
-	weeks = pd.date_range(oldest_date, latest_date, freq='W')
+	# If there are no contributors, skip to the next repository
+	if not contributors:
+		continue
+
+	try:
+		oldest_date = min([c.weeks[0].w for c in contributors])
+		latest_date = max([c.weeks[-1].w for c in contributors])
+		weeks = pd.date_range(oldest_date, latest_date, freq='W')
+	except GithubException:
+		print(f"Error generating date range for '{repo_slug}', skipping.")
+		continue
+	except ValueError:
+		print(f"Error generating date range for '{repo_slug}', skipping.")
+		continue
+	except BaseException as e:
+		print(f"Error generating date range for '{repo_slug}', skipping: {e}")
+		continue
 
 	# Pre-process contributors weeks and store data in a dictionary with week as the key
 	contributor_dict = {}

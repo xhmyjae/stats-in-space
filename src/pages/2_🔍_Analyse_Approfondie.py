@@ -1,6 +1,9 @@
+from ast import literal_eval
 import pandas as pd
 import altair as alt
 import streamlit as st
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 data: pd.DataFrame = st.session_state['data']
 

@@ -36,4 +36,4 @@ En explorant ces différents indicateurs, nous pourrons dégager les grandes ten
 )
 
 if st.button("Passer à l'analyse des données"):
-	st.switch_page("pages/🗃️_Première_Analyse.py")
+	st.switch_page("pages/1_🗃️_Première_Analyse.py")

@@ -1,3 +1,5 @@
+import time
+
 import dotenv
 import os
 import pandas as pd
@@ -16,7 +18,7 @@ g = Github(auth=auth)
 
 
 def fetch_commits(repo_slug: str) -> list[StatsContributor]:
-	repo = g.get_repo(repo_slug)
+	repo = g.get_repo(repo_slug, lazy=True)
 	contributors = repo.get_stats_contributors()
 	return contributors or []
 
@@ -24,15 +26,21 @@ def fetch_commits(repo_slug: str) -> list[StatsContributor]:
 repos = pd.read_csv('repositories.csv', parse_dates=['Created At', 'Updated At'])
 repos['Slug'] = repos['URL'].apply(lambda x: x.removeprefix('https://github.com/').removesuffix('/'))
 
-first_10_repos = repos['Slug'].head(10)
+FETCH_COUNT = 1000
+repos_to_fetch: list[str] = repos['Slug'].head(FETCH_COUNT).tolist()
 
 # We want to only store the total number of commits per week per repository
 commits = pd.DataFrame(columns=['repo_slug', 'total_commits', 'week', 'week_next'])
-# Store as [repo_slug, week, total_commits]
-index = 0
-for repo_slug in first_10_repos:
+
+for i, repo_slug in enumerate(repos_to_fetch):
 	contributors = fetch_commits(repo_slug)
-	print(f"Fetched {len(contributors)} contributors for '{repo_slug}', total commits: {sum([c.total for c in contributors])}")
+	commits_count = sum([c.total for c in contributors])
+
+	if g.rate_limiting[0] < 100:
+		print(f"Rate limit reached, remaining: {g.rate_limiting[0]}, sleeping for 1 minute.")
+		time.sleep(60)
+
+	print(f"{i + 1}/{len(repos_to_fetch)} Fetched {len(contributors)} contributors for '{repo_slug}', total commits: {commits_count}, remaining rate limit: {g.rate_limiting[0]}")
 
 	oldest_date = min([c.weeks[0].w for c in contributors])
 	latest_date = max([c.weeks[-1].w for c in contributors])
@@ -64,9 +72,11 @@ for repo_slug in first_10_repos:
 	commits_df = commits_df[['repo_slug', 'total_commits', 'week', 'week_next']]
 
 	# Appending the dataframe to the commits dataframe
-
-	commits = pd.concat([commits, commits_df], ignore_index=True)
+	if commits.empty:
+		commits = commits_df
+	else:
+		commits = pd.concat([commits, commits_df], ignore_index=True)
 
 
 commits.to_csv('commits.csv', index=False)
-print(commits)
+commits.info()

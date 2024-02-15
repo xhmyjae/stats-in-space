@@ -17,21 +17,21 @@ data = load_data()
 st.session_state['data'] = data
 
 
-st.title("L'évolution de l'open source sur GitHub")
+st.title("L'évolution de l'open source sur **GitHub**")
 
 st.header("Contexte et problématique")
 
 st.write(
 	"""
-GitHub est aujourd'hui l'une des plateformes les plus utilisées pour héberger et développer des projets open source. Au fil des années, le nombre de dépôts et de contributeurs n'a cessé de croître.
+**GitHub** est aujourd'hui l'une des plateformes les plus utilisées pour héberger et développer des projets open source. Au fil des années, le nombre de dépôts et de contributeurs n'a cessé de croître.
 
-Dans ce projet, nous allons analyser un jeu de données issues de GitHub afin de mieux comprendre les tendances récentes de l'open source sur cette plateforme. Plus précisément, nous chercherons à répondre aux questions suivantes:
+Dans ce projet, nous allons analyser un jeu de données issues de **GitHub** afin de mieux comprendre les tendances récentes de l'open source sur cette plateforme. Plus précisément, nous chercherons à répondre aux questions suivantes:
 
 - Quels sont les langages et domaines qui connaissent la plus forte croissance ces dernières années ?
 - Comment évolue le nombre moyen de contributeurs par projet ?
 - Certains types de licences open source sont-ils plus populaires ?
 
-En explorant ces différents indicateurs, nous pourrons dégager les grandes tendances qui façonnent l'avenir du développement libre collaboratif sur GitHub.
+En explorant ces différents indicateurs, nous pourrons dégager les grandes tendances qui façonnent l'avenir du développement libre collaboratif sur **GitHub**.
 """
 )
 

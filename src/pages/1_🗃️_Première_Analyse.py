@@ -85,4 +85,4 @@ st.write("Enfin, l'analyse des licences open source préférées des développeu
          "langages et des projets.")
 
 if st.button("Passer à l'analyse approfondie"):
-    st.switch_page("pages/🔍_Analyse_Approfondie.py")
+    st.switch_page("pages/2_🔍_Analyse_Approfondie.py")

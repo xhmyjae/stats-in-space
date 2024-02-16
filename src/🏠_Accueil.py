@@ -16,7 +16,7 @@ def load_data() -> pd.DataFrame:
 
 
 @st.cache_data
-def get_github_colors() -> dict[str, str]:
+def load_colors() -> dict[str, str]:
 	json = pd.read_json('../colors.json')
 	# json is an of [{[k: string]: {color: string}}]
 
@@ -26,11 +26,19 @@ def get_github_colors() -> dict[str, str]:
 		colors[item] = json[item]['color']
 	return colors
 
+@st.cache_data
+def load_commits() -> pd.DataFrame:
+	commits = pd.read_csv('../commits.csv', parse_dates=['week', 'week_next'])
+	return commits
 
-data = load_data()
-colors = get_github_colors()
-st.session_state['data'] = data
-st.session_state['colors'] = colors
+
+if "data" not in st.session_state:
+	data = load_data()
+	colors = load_colors()
+	commits = load_commits()
+	st.session_state['data'] = data
+	st.session_state['colors'] = colors
+	st.session_state['commits'] = commits
 
 
 @st.cache_data

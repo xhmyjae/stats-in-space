@@ -51,8 +51,9 @@ st.write("En analysant le nombre de repos par langage, nous pouvons comprendre l
 
 
 none_value = 'Non-spécifié'
-data['Language'] = data['Language'].fillna(none_value)
-data_languages = data.groupby('Language').size().reset_index().sort_values(ascending=True, by=0).tail(10)
+data_languages = data.copy()
+data_languages['Language'] = data_languages['Language'].fillna(none_value)
+data_languages = data_languages.groupby('Language').size().reset_index().sort_values(ascending=True, by=0).tail(10)
 
 data_languages['color'] = data_languages['Language'].apply(lambda x: colors[x] if x in colors else colors[none_value])
 data_languages.columns = ['Language', 'Nombre de dépôts', 'color']

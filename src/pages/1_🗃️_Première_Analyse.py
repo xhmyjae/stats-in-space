@@ -125,7 +125,7 @@ forks_chart = alt.Chart(repositories_per_month.reset_index()).mark_line().encode
 
 st.altair_chart(stars_chart + forks_chart, use_container_width=True)
 
-st.header("Ces graphiques permettront d'analyser:")
+st.header("Ces graphiques permettent d'analyser :")
 
 ###
 # - La croissance globale de **GitHub**

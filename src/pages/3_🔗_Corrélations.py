@@ -52,7 +52,7 @@ chart_size = alt.Chart(average_stats_by_year).mark_bar(color='red').encode(
     title='Taille moyenne par année'
 )
 
-st.write(chart_stars | chart_forks | chart_size)
+st.write(chart_stars, '\n', chart_forks, '\n', chart_size)
 
 correlation = data[['Size', 'Stars', 'Forks']].corr()
 

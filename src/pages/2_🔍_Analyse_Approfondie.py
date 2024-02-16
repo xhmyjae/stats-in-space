@@ -170,23 +170,28 @@ st.write("En analysant l'activité des commits par langages, nous pouvons dégag
          "reflètent les préférences et les pratiques des développeurs dans différents langages de programmation.")
 
 data['repo_slug'] = data['Slug']
+# Jointure sur repo_slug
 df = commits.merge(data[['repo_slug', 'Language']], on='repo_slug')
 commits_lang = df.groupby(['Language', df['week'].dt.year])['total_commits'].sum().reset_index()
-top_langs = data['Language'].value_counts().index[:15]
-top_repos = data[data['Language'].isin(top_langs)]
-pivot = top_repos.pivot_table(index='Language', columns=top_repos['Created At'].dt.year, values='Name', aggfunc='count')
+
+# Trier et prendre les 15 premiers langages
+top_langs = commits_lang['Language'].value_counts().index[:15]
+commits_lang = commits_lang[commits_lang['Language'].isin(top_langs)]
+commits_lang = commits_lang.sort_values(by='total_commits', ascending=False)
+
+pivot = commits_lang.pivot_table(index='Language', columns='week', values='total_commits', aggfunc='sum')
 pivot = pivot.fillna(0)
-pivot = pivot.reset_index().melt(id_vars='Language', var_name='Year', value_name='Repo Count')
-chart = alt.Chart(pivot).mark_rect().encode(
-    x='Year:O',
-    y='Language:O',
-    color='Repo Count:Q',
-    tooltip=['Language', 'Year', 'Repo Count']
+
+chart = alt.Chart(pivot.reset_index().melt('Language')).mark_rect().encode(
+    x=alt.X('week:O', title='Année'),
+    y=alt.Y('Language:N', sort='-x'),
+    color=alt.Color('value:Q', title='Nombre de commits')
 ).properties(
     width=800,
     height=500,
-    title='Nombre de repos par langage et année'
+    title='Nombre de commits mensuel par langage'
 )
+
 
 st.write(chart)
 

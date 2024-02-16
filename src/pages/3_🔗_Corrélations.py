@@ -76,19 +76,15 @@ plt.tight_layout()
 
 st.pyplot(plt)
 
-st.header("Focus langages")
-
-st.subheader("Corrélation Python variables")
-
-st.subheader("Corrélation Java variables")
-
-st.subheader("Corrélation JS variables")
-
 st.header("Dynamique temporelle")
 
 st.subheader("Évolution corrélations 2007-2022")
+st.write("Dans cette section sur la dynamique temporelle, nous examinons l'évolution des corrélations entre 2007 et "
+         "2022, mettant en lumière les changements et les tendances au fil du temps.")
 
 st.subheader("Impact nouveaux langages sur corrélations")
+st.write("Ensuite, nous explorons l'impact des nouveaux langages sur ces corrélations. Cela nous permet de comprendre "
+         "comment l'émergence de nouveaux outils influence les relations entre les différents paramètres analysés.")
 
 
 st.header("Conclusion")

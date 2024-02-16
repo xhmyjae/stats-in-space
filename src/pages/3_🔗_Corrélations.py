@@ -92,3 +92,7 @@ st.subheader("Impact nouveaux langages sur corrélations")
 
 
 st.header("Conclusion")
+st.write("""
+L'analyse approfondie des données de GitHub révèle des tendances clés dans l'écosystème du développement open source. 
+Les axes de recherche examinent le choix des langages, la popularité des projets, les licences préférées et la croissance sectorielle. Les insights obtenus permettent de comprendre les préférences des développeurs, l'impact de l'engagement sur la réussite des projets et les dynamiques de collaboration. 
+Ces informations sont précieuses pour guider les décisions stratégiques, les choix technologiques et les analyses de marché.""")

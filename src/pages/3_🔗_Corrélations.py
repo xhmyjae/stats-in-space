@@ -59,9 +59,9 @@ correlation = data[['Size', 'Stars', 'Forks']].corr()
 st.write("Matrice de corrélation :")
 st.write(correlation)
 
-st.subheader("- Corrélation Has Issues, Has Projects, Has Wiki, Has Pages, Has Downloads, Has Discussions")
-st.write("De plus, en complément de notre analyse précédente, nous examinons les corrélations entre Has Issues, "
-         "Has Projects, Has Wiki, Has Pages, Has Downloads, Has Discussions pour saisir l'interconnexion entre les "
+st.subheader("- Corrélation `Has Issues`, `Has Projects`, `Has Wiki`, `Has Pages`, `Has Downloads`, `Has Discussions`")
+st.write("De plus, en complément de notre analyse précédente, nous examinons les corrélations entre `Has Issues`, "
+         "`Has Projects`, `Has Wiki`, `Has Pages`, `Has Downloads`, `Has Discussions` pour saisir l'interconnexion entre les "
          "aspects fondamentaux des projets.")
 
 variables = ['Has Issues', 'Has Projects', 'Has Wiki', 'Has Pages', 'Has Downloads', 'Has Discussions']

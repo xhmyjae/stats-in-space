@@ -17,6 +17,16 @@ data = load_data()
 st.session_state['data'] = data
 
 
+@st.cache_data
+def load_commits() -> pd.DataFrame:
+	commits = pd.read_csv('../commits.csv', parse_dates=['week', 'week_next'])
+	return commits
+
+
+commits = load_commits()
+st.session_state['commits'] = commits
+
+
 st.title("L'évolution de l'open source sur **GitHub**")
 
 st.header("Contexte et problématique")

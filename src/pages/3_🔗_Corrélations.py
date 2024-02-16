@@ -11,7 +11,7 @@ st.title("Analyse des corrélations")
 
 st.header("Corrélations multidimensionnelles")
 
-st.subheader("Corrélation étoiles, forks, taille")
+st.subheader("- Corrélation étoiles, forks, taille")
 st.write("Pour explorer les corrélations multidimensionnelles, nous nous penchons sur les corrélations spécifiques "
          "entre étoiles, forks et taille pour approfondir notre compréhension des relations entre ces métriques.")
 
@@ -59,7 +59,7 @@ correlation = data[['Size', 'Stars', 'Forks']].corr()
 st.write("Matrice de corrélation :")
 st.write(correlation)
 
-st.subheader("Corrélation Has Issues, Has Projects, Has Wiki, Has Pages, Has Downloads, Has Discussions")
+st.subheader("- Corrélation Has Issues, Has Projects, Has Wiki, Has Pages, Has Downloads, Has Discussions")
 st.write("De plus, en complément de notre analyse précédente, nous examinons les corrélations entre Has Issues, "
          "Has Projects, Has Wiki, Has Pages, Has Downloads, Has Discussions pour saisir l'interconnexion entre les "
          "aspects fondamentaux des projets.")
@@ -79,7 +79,7 @@ st.pyplot(plt)
 
 st.header("Dynamique temporelle")
 
-st.subheader("Évolution corrélations 2007-2022")
+st.subheader("- Évolution corrélations 2007-2022")
 st.write(
 	"Dans cette section sur la dynamique temporelle, nous examinons l'évolution des corrélations entre 2007 et "
 	"2023, mettant en lumière les changements et les tendances au fil du temps."
@@ -103,7 +103,7 @@ chart = alt.Chart(correlation_evolution).mark_line().encode(
 
 st.altair_chart(chart, use_container_width=True)
 
-st.subheader("Impact nouveaux langages sur corrélations")
+st.subheader("- Impact nouveaux langages sur corrélations")
 st.write(
 	"Ensuite, nous explorons l'impact des nouveaux langages sur ces corrélations. Cela nous permet de comprendre "
 	"comment l'émergence de nouveaux outils influence les relations entre les différents paramètres analysés.")

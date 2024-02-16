@@ -10,11 +10,27 @@ def load_data() -> pd.DataFrame:
 	data = pd.read_csv('../repositories.csv', parse_dates=['Created At', 'Updated At'])
 	# Reading the 'Topics' column as a list of strings
 	data['Topics'] = data['Topics'].apply(literal_eval)
+	data['Created At Year'] = data['Created At'].dt.year
+	data['Created At Year str'] = data['Created At'].dt.strftime('%Y')
 	return data
 
 
+@st.cache_data
+def get_github_colors() -> dict[str, str]:
+	json = pd.read_json('../colors.json')
+	# json is an of [{[k: string]: {color: string}}]
+
+	colors = {'Non-spécifié': 'grey'}
+	item: str
+	for item in json:
+		colors[item] = json[item]['color']
+	return colors
+
+
 data = load_data()
+colors = get_github_colors()
 st.session_state['data'] = data
+st.session_state['colors'] = colors
 
 
 @st.cache_data

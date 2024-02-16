@@ -3,10 +3,11 @@ import altair as alt
 import streamlit as st
 
 data: pd.DataFrame = st.session_state['data']
+colors: dict[str, str] = st.session_state['colors']
 
 st.header("Données brutes")
 
-st.dataframe(data, column_config={
+st.dataframe(data.head(1000), column_config={
     'Created At': st.column_config.DatetimeColumn(
         "Date de création",
         format="D/MM/YYYY à HH:mm",
@@ -24,14 +25,14 @@ st.header("Analyse basique des données")
 
 st.subheader("Nombre de repos dans le temps")
 
-count_by_year = data.groupby([data['Created At'].dt.year]).size()
+count_by_year = data.groupby('Created At Year').size()
 count_by_year.name = 'Nombre de repos'
 count_by_year = count_by_year.reset_index()
 
 chart = alt.Chart(count_by_year).mark_bar().encode(
-    x=alt.X('Created At:O', title='Année'),
+    x=alt.X('Created At Year:O', title='Année'),
     y=alt.Y('Nombre de repos:Q', title='Nombre de repos'),
-    tooltip=['Created At', 'Nombre de repos']
+    tooltip=['Created At Year', 'Nombre de repos']
 ).properties(
     width=800,
     height=400
@@ -49,20 +50,6 @@ st.write("En analysant le nombre de repos par langage, nous pouvons comprendre l
          "les plus populaires, illustrées à partir de la colonne `Language`.")
 
 
-@st.cache_data
-def get_github_colors() -> dict[str, str]:
-    json = pd.read_json('../colors.json')
-    # json is an of [{[k: string]: {color: string}}]
-
-    colors = {'Non-spécifié': 'grey'}
-    item: str
-    for item in json:
-        colors[item] = json[item]['color']
-    return colors
-
-
-colors = get_github_colors()
-
 none_value = 'Non-spécifié'
 data['Language'] = data['Language'].fillna(none_value)
 data_languages = data.groupby('Language').size().reset_index().sort_values(ascending=True, by=0).tail(10)
@@ -77,11 +64,14 @@ chart = alt.Chart(data_languages).mark_bar().encode(
 st.altair_chart(chart, use_container_width=True)
 
 ###
-# - Moyenne du nombre d'étoiles (Stars) gagnées chaque année
+# - Nombre d'étoiles des projets cumulées par année
 ###
 st.subheader("- Moyenne du nombre d'étoiles (Stars) gagnées chaque année")
-st.write("Cette analyse des parts de marché nous permet ensuite d'examiner la moyenne du nombre d'étoiles gagnées "
-         "chaque année, offrant un aperçu de la popularité croissante des projets dans ces langages populaires.")
+st.write("Cette analyse des parts de marché nous permet ensuite d'examiner le nombre d'étoiles des projets cumulées par "
+            "année, offrant une perspective sur la popularité des projets de la plateforme.")
+
+cumulative_stars_by_year = data.groupby('Created At Year str')['Stars'].sum().cumsum()
+st.line_chart(cumulative_stars_by_year)
 
 ###
 # - Nombre de dépôts par licence (`License`) open source
@@ -91,6 +81,14 @@ st.write("La popularité des projets étant évaluée, nous pouvons ensuite exam
          "par licence open source pour comprendre les préférences de licence des développeurs travaillant dans ces "
          "langages.")
 
+data_licenses = data.groupby('License').size().reset_index().sort_values(ascending=True, by=0).tail(10)
+data_licenses.columns = ['License', 'Nombre de dépôts']
+chart = alt.Chart(data_licenses).mark_bar().encode(
+    x=alt.X('License', sort='-y'),
+    y=alt.Y('Nombre de dépôts:Q', title='Nombre de dépôts'),
+)
+st.altair_chart(chart, use_container_width=True)
+
 ###
 # - Taux de croissance annuel du nombre de projets par domaine (`Topics`)
 ###
@@ -98,6 +96,12 @@ st.subheader("- Taux de croissance annuel du nombre de projets par domaine (`Top
 st.write("En parallèle, l'étude du taux de croissance annuel du nombre de projets par domaine nous permet de détecter "
          "les tendances émergentes, potentiellement influencées par les choix de licence et la popularité des "
          "langages.")
+
+# limite to topics having more than 1000 repos
+growth_by_topic = data.explode('Topics').groupby([data['Created At'].dt.year, 'Topics']).size().unstack().fillna(0)
+growth_by_topic = growth_by_topic[growth_by_topic.sum().sort_values(ascending=False).head(10).index]
+growth_by_topic = growth_by_topic.diff(axis=0).fillna(0).cumsum()
+st.line_chart(growth_by_topic)
 
 ###
 # - Corrélation entre le nombre d'étoiles et le nombre de forks
@@ -107,9 +111,18 @@ st.write("Cette analyse des tendances émergentes nous amène à examiner la cor
          "nombre de forks, pour comprendre l'impact des forks sur la popularité des projets, notamment dans les "
          "domaines en croissance.")
 
-avg_stars_by_year = data.groupby('Created At')['Stars'].mean()
-avg_forks_by_year = data.groupby('Created At')['Forks'].mean()
-st.line_chart(pd.concat([avg_stars_by_year, avg_forks_by_year], axis=1, keys=['Stars', 'Forks']))
+repositories_per_month = data.groupby(data['Created At'].dt.strftime('%Y-%m')).agg({'Stars': 'mean', 'Forks': 'mean'})
+stars_chart = alt.Chart(repositories_per_month.reset_index()).mark_line().encode(
+    x='Created At:T',
+    y='Stars:Q',
+    color=alt.value('yellow')
+)
+forks_chart = alt.Chart(repositories_per_month.reset_index()).mark_line().encode(
+    x='Created At:T',
+    y='Forks:Q',
+)
+
+st.altair_chart(stars_chart + forks_chart, use_container_width=True)
 
 st.header("Ces graphiques permettront d'analyser:")
 
